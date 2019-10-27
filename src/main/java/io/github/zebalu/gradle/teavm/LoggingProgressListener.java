@@ -20,28 +20,35 @@ import org.teavm.vm.TeaVMPhase;
 import org.teavm.vm.TeaVMProgressFeedback;
 import org.teavm.vm.TeaVMProgressListener;
 
+/**
+ * A simple class that logs TeaVM Progress Messages.
+ * 
+ * @author zebalu
+ *
+ */
 public class LoggingProgressListener implements TeaVMProgressListener {
 
-	private final Logger log;
-	private double target = 1.0;
-	private TeaVMPhase currentPhase;
+    private final Logger log;
+    private double target = 1.0;
+    private TeaVMPhase currentPhase;
 
-	public LoggingProgressListener(Logger log) {
-		this.log = log;
-	}
+    public LoggingProgressListener(Logger log) {
+        this.log = log;
+    }
 
-	@Override
-	public TeaVMProgressFeedback phaseStarted(TeaVMPhase phase, int maxSteps) {
-		log.info("TeaVM: Progress, phase: {} started, targeted steps: {}", phase, (int)maxSteps);
-		target = maxSteps;
-		currentPhase = phase;
-		return TeaVMProgressFeedback.CONTINUE;
-	}
+    @Override
+    public TeaVMProgressFeedback phaseStarted(TeaVMPhase phase, int maxSteps) {
+        log.info("TeaVM: Progress, phase: {} started, targeted steps: {}", phase, (int) maxSteps);
+        target = maxSteps;
+        currentPhase = phase;
+        return TeaVMProgressFeedback.CONTINUE;
+    }
 
-	@Override
-	public TeaVMProgressFeedback progressReached(int stepsReached) {
-		log.info("TeaVM: {}; progress reached: {} of {} -- {}%", currentPhase, stepsReached, (int)target, (int)(Math.round(stepsReached/target*100.0)));
-		return TeaVMProgressFeedback.CONTINUE;
-	}
+    @Override
+    public TeaVMProgressFeedback progressReached(int stepsReached) {
+        log.info("TeaVM: {}; progress reached: {} of {} -- {}%", currentPhase, stepsReached, (int) target,
+                (int) (Math.round(stepsReached / target * 100.0)));
+        return TeaVMProgressFeedback.CONTINUE;
+    }
 
 }

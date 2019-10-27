@@ -19,52 +19,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teavm.tooling.TeaVMToolLog;
 
+/**
+ * Wrapper of {@link Logger} class to be able to be passed to anything needs a
+ * {@link TeaVMToolLog} class.
+ * 
+ * @author zebalu
+ *
+ */
 public class Slf4JTeavmLog implements TeaVMToolLog {
-	
-	private final Logger log;
-	
-	public Slf4JTeavmLog(Class<?> clazz) {
-		log = LoggerFactory.getLogger(clazz);
-	}
 
-	@Override
-	public void info(String text) {
-		log.info(text);
-	}
+    private final Logger log;
 
-	@Override
-	public void debug(String text) {
-		log.debug(text);
-	}
+    public Slf4JTeavmLog(Class<?> clazz) {
+        log = LoggerFactory.getLogger(clazz);
+    }
 
-	@Override
-	public void warning(String text) {
-		log.warn(text);
-	}
+    @Override
+    public void info(String text) {
+        log.info(text);
+    }
 
-	@Override
-	public void error(String text) {
-		log.error(text);
-	}
+    @Override
+    public void debug(String text) {
+        log.debug(text);
+    }
 
-	@Override
-	public void info(String text, Throwable e) {
-		log.info(text, e);
-	}
+    @Override
+    public void warning(String text) {
+        log.warn(text);
+    }
 
-	@Override
-	public void debug(String text, Throwable e) {
-		log.debug(text, e);
-	}
+    @Override
+    public void error(String text) {
+        log.error(text);
+    }
 
-	@Override
-	public void warning(String text, Throwable e) {
-		log.warn(text, e);
-	}
+    @Override
+    public void info(String text, Throwable e) {
+        log.info(text, e);
+    }
 
-	@Override
-	public void error(String text, Throwable e) {
-		log.error(text, e);
-	}
+    @Override
+    public void debug(String text, Throwable e) {
+        log.debug(text, e);
+    }
+
+    @Override
+    public void warning(String text, Throwable e) {
+        log.warn(text, e);
+    }
+
+    @Override
+    public void error(String text, Throwable e) {
+        log.error(text, e);
+    }
 
 }

@@ -29,14 +29,19 @@ import org.teavm.backend.wasm.render.WasmBinaryVersion;
 import org.teavm.tooling.TeaVMTargetType;
 import org.teavm.vm.TeaVMOptimizationLevel;
 
+/**
+ * Extension calss to set up TeaVM compiler.
+ * 
+ * @author zebalu
+ */
 public class TeavmExtension {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(TeavmExtension.class);
-	
+
+    private static final Logger LOG = LoggerFactory.getLogger(TeavmExtension.class);
+
     private FileCollection classFiles = null;
 
     private List<String> compileScopes = null;
-    
+
     private boolean minifying = true;
 
     private int maxTopLevelNames = 10000;
@@ -45,7 +50,7 @@ public class TeavmExtension {
 
     private boolean debugInformationGenerated = false;
 
-    private boolean sourceMapsGenerated = false ;
+    private boolean sourceMapsGenerated = false;
 
     private boolean sourceFilesCopied = false;
 
@@ -79,294 +84,384 @@ public class TeavmExtension {
 
     private int minHeapSize = 4;
 
-    private int maxHeapSize= 128;
+    private int maxHeapSize = 128;
 
-    private boolean outOfProcessv= false;
+    private boolean outOfProcessv = false;
 
     private int processMemory = 512;
 
     private boolean longjmpSupported = true;
 
     private boolean heapDump = false;
-    
+
     private List<String> includeJarsFrom = new ArrayList<>(Arrays.asList("runtimeClasspath"));
-    
+
     private FileCollection extraLibs = null;
-    
+
     private boolean skipJavaCompile = false;
 
-	public FileCollection getClassFiles() {
-		return classFiles;
-	}
+    /**
+     * List of (jar)files/folders where input .class files can be found.
+     * 
+     * @return
+     */
+    public FileCollection getClassFiles() {
+        return classFiles;
+    }
 
-	public void setClassFiles(FileCollection classFiles) {
-		this.classFiles = classFiles;
-	}
+    /**
+     * Set list of class files to compile with TeaVM.
+     * 
+     * @param classFiles
+     */
+    public void setClassFiles(FileCollection classFiles) {
+        this.classFiles = classFiles;
+    }
 
-	public List<String> getCompileScopes() {
-		return compileScopes;
-	}
+    public List<String> getCompileScopes() {
+        return compileScopes;
+    }
 
-	public void setCompileScopes(List<String> compileScopes) {
-		this.compileScopes = compileScopes;
-	}
+    public void setCompileScopes(List<String> compileScopes) {
+        this.compileScopes = compileScopes;
+    }
 
-	public boolean isMinifying() {
-		return minifying;
-	}
+    public boolean isMinifying() {
+        return minifying;
+    }
 
-	public void setMinifying(boolean minifying) {
-		this.minifying = minifying;
-	}
+    public void setMinifying(boolean minifying) {
+        this.minifying = minifying;
+    }
 
-	public int getMaxTopLevelNames() {
-		return maxTopLevelNames;
-	}
+    /**
+     * Number of max kept name. (Default is 10 000)
+     * 
+     * @return
+     */
+    public int getMaxTopLevelNames() {
+        return maxTopLevelNames;
+    }
 
-	public void setMaxTopLevelNames(int maxTopLevelNames) {
-		this.maxTopLevelNames = maxTopLevelNames;
-	}
+    public void setMaxTopLevelNames(int maxTopLevelNames) {
+        this.maxTopLevelNames = maxTopLevelNames;
+    }
 
-	public Properties getProperties() {
-		return properties;
-	}
+    public Properties getProperties() {
+        return properties;
+    }
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
-	public boolean isDebugInformationGenerated() {
-		return debugInformationGenerated;
-	}
+    public boolean isDebugInformationGenerated() {
+        return debugInformationGenerated;
+    }
 
-	public void setDebugInformationGenerated(boolean debugInformationGenerated) {
-		this.debugInformationGenerated = debugInformationGenerated;
-	}
+    public void setDebugInformationGenerated(boolean debugInformationGenerated) {
+        this.debugInformationGenerated = debugInformationGenerated;
+    }
 
-	public boolean isSourceMapsGenerated() {
-		return sourceMapsGenerated;
-	}
+    public boolean isSourceMapsGenerated() {
+        return sourceMapsGenerated;
+    }
 
-	public void setSourceMapsGenerated(boolean sourceMapsGenerated) {
-		this.sourceMapsGenerated = sourceMapsGenerated;
-	}
+    public void setSourceMapsGenerated(boolean sourceMapsGenerated) {
+        this.sourceMapsGenerated = sourceMapsGenerated;
+    }
 
-	public boolean isSourceFilesCopied() {
-		return sourceFilesCopied;
-	}
+    public boolean isSourceFilesCopied() {
+        return sourceFilesCopied;
+    }
 
-	public void setSourceFilesCopied(boolean sourceFilesCopied) {
-		this.sourceFilesCopied = sourceFilesCopied;
-	}
+    public void setSourceFilesCopied(boolean sourceFilesCopied) {
+        this.sourceFilesCopied = sourceFilesCopied;
+    }
 
-	public boolean isIncremental() {
-		return incremental;
-	}
+    public boolean isIncremental() {
+        return incremental;
+    }
 
-	public void setIncremental(boolean incremental) {
-		this.incremental = incremental;
-	}
+    public void setIncremental(boolean incremental) {
+        this.incremental = incremental;
+    }
 
-	public String[] getTransformers() {
-		return transformers;
-	}
+    public String[] getTransformers() {
+        return transformers;
+    }
 
-	public void setTransformers(String[] transformers) {
-		this.transformers = transformers;
-	}
+    public void setTransformers(String[] transformers) {
+        this.transformers = transformers;
+    }
 
-	public File getTargetDirectory() {
-		return targetDirectory;
-	}
+    /**
+     * Where to save the result file.
+     * 
+     * @return
+     */
+    public File getTargetDirectory() {
+        return targetDirectory;
+    }
 
-	public void setTargetDirectory(File targetDirectory) {
-		this.targetDirectory = targetDirectory;
-	}
+    public void setTargetDirectory(File targetDirectory) {
+        this.targetDirectory = targetDirectory;
+    }
 
-	public File getSourceDirectory() {
-		return sourceDirectory;
-	}
+    /**
+     * This folder hold the original java files. This is only for the plugin to
+     * monitor whether recompilation is needed or not.
+     * 
+     * @return
+     */
+    public File getSourceDirectory() {
+        return sourceDirectory;
+    }
 
-	public void setSourceDirectory(File sourceDirectory) {
-		this.sourceDirectory = sourceDirectory;
-	}
+    public void setSourceDirectory(File sourceDirectory) {
+        this.sourceDirectory = sourceDirectory;
+    }
 
-	public String getTargetFileName() {
-		return targetFileName;
-	}
+    /**
+     * How to name the resulting file. Default is classes.js
+     * 
+     * @return
+     */
+    public String getTargetFileName() {
+        return targetFileName;
+    }
 
-	public void setTargetFileName(String targetFileName) {
-		this.targetFileName = targetFileName;
-	}
+    public void setTargetFileName(String targetFileName) {
+        this.targetFileName = targetFileName;
+    }
 
-	public String getMainClass() {
-		return mainClass;
-	}
+    /**
+     * The name of the main class (this will be the entrypoint of your JavaScript.)
+     * 
+     * @return
+     */
+    public String getMainClass() {
+        return mainClass;
+    }
 
-	public void setMainClass(String mainClass) {
-		this.mainClass = mainClass;
-	}
+    public void setMainClass(String mainClass) {
+        this.mainClass = mainClass;
+    }
 
-	public String getEntryPointName() {
-		return entryPointName;
-	}
+    /**
+     * The name of the javascript method to start your app. (Default is main()).
+     * Always use together with mainClass
+     * 
+     * @return
+     */
+    public String getEntryPointName() {
+        return entryPointName;
+    }
 
-	public void setEntryPointName(String entryPointName) {
-		this.entryPointName = entryPointName;
-	}
+    public void setEntryPointName(String entryPointName) {
+        this.entryPointName = entryPointName;
+    }
 
-	public String[] getClassesToPreserve() {
-		return classesToPreserve;
-	}
+    public String[] getClassesToPreserve() {
+        return classesToPreserve;
+    }
 
-	public void setClassesToPreserve(String[] classesToPreserve) {
-		this.classesToPreserve = classesToPreserve;
-	}
+    public void setClassesToPreserve(String[] classesToPreserve) {
+        this.classesToPreserve = classesToPreserve;
+    }
 
-	public boolean isStopOnErrors() {
-		return stopOnErrors;
-	}
+    /**
+     * If false we don't throw gradle exception on teavm compile errors.
+     */
+    public boolean isStopOnErrors() {
+        return stopOnErrors;
+    }
 
-	public void setStopOnErrors(boolean stopOnErrors) {
-		this.stopOnErrors = stopOnErrors;
-	}
+    public void setStopOnErrors(boolean stopOnErrors) {
+        this.stopOnErrors = stopOnErrors;
+    }
 
-	public TeaVMOptimizationLevel getOptimizationLevel() {
-		return optimizationLevel;
-	}
+    /**
+     * The current optimization level. Options are:
+     * {@link TeaVMOptimizationLevel#ADVANCED}, {@link TeaVMOptimizationLevel#FULL},
+     * {@link TeaVMOptimizationLevel#SIMPLE}. Default is SIMPLE
+     * 
+     * @return
+     */
+    public TeaVMOptimizationLevel getOptimizationLevel() {
+        return optimizationLevel;
+    }
 
-	public void setOptimizationLevel(TeaVMOptimizationLevel optimizationLevel) {
-		this.optimizationLevel = optimizationLevel;
-	}
-	
-	public void setOptimizationLevel(String optimizationLevel) {
-		this.optimizationLevel = TeaVMOptimizationLevel.valueOf(optimizationLevel);
-	}
+    public void setOptimizationLevel(TeaVMOptimizationLevel optimizationLevel) {
+        this.optimizationLevel = optimizationLevel;
+    }
 
-	public boolean isFastGlobalAnalysis() {
-		return fastGlobalAnalysis;
-	}
+    public void setOptimizationLevel(String optimizationLevel) {
+        this.optimizationLevel = TeaVMOptimizationLevel.valueOf(optimizationLevel);
+    }
 
-	public void setFastGlobalAnalysis(boolean fastGlobalAnalysis) {
-		this.fastGlobalAnalysis = fastGlobalAnalysis;
-	}
+    public boolean isFastGlobalAnalysis() {
+        return fastGlobalAnalysis;
+    }
 
-	public TeaVMTargetType getTargetType() {
-		return targetType;
-	}
+    public void setFastGlobalAnalysis(boolean fastGlobalAnalysis) {
+        this.fastGlobalAnalysis = fastGlobalAnalysis;
+    }
 
-	public void setTargetType(TeaVMTargetType targetType) {
-		this.targetType = targetType;
-	}
+    /**
+     * Returns the {@link TeaVMTargetType} Options are:
+     * {@link TeaVMTargetType#JAVASCRIPT} (default),
+     * {@link TeaVMTargetType#WEBASSEMBLY}, {@link TeaVMTargetType#C} (highly
+     * experimental, as I know)
+     * 
+     * @return
+     */
+    public TeaVMTargetType getTargetType() {
+        return targetType;
+    }
 
-	public void setTargetType(String targetType) {
-		this.targetType = TeaVMTargetType.valueOf(targetType);
-	}
-	
-	public File getCacheDirectory() {
-		return cacheDirectory;
-	}
+    public void setTargetType(TeaVMTargetType targetType) {
+        this.targetType = targetType;
+    }
 
-	public void setCacheDirectory(File cacheDirectory) {
-		this.cacheDirectory = cacheDirectory;
-	}
+    public void setTargetType(String targetType) {
+        this.targetType = TeaVMTargetType.valueOf(targetType);
+    }
 
-	public WasmBinaryVersion getWasmVersion() {
-		return wasmVersion;
-	}
+    public File getCacheDirectory() {
+        return cacheDirectory;
+    }
 
-	public void setWasmVersion(WasmBinaryVersion wasmVersion) {
-		this.wasmVersion = wasmVersion;
-	}
+    public void setCacheDirectory(File cacheDirectory) {
+        this.cacheDirectory = cacheDirectory;
+    }
 
-	public void setWasmVersion(String wasmVersion) {
-		this.wasmVersion = WasmBinaryVersion.valueOf(wasmVersion);
-	}
-	
-	public int getMinHeapSize() {
-		return minHeapSize;
-	}
+    public WasmBinaryVersion getWasmVersion() {
+        return wasmVersion;
+    }
 
-	public void setMinHeapSize(int minHeapSize) {
-		this.minHeapSize = minHeapSize;
-	}
+    public void setWasmVersion(WasmBinaryVersion wasmVersion) {
+        this.wasmVersion = wasmVersion;
+    }
 
-	public int getMaxHeapSize() {
-		return maxHeapSize;
-	}
+    public void setWasmVersion(String wasmVersion) {
+        this.wasmVersion = WasmBinaryVersion.valueOf(wasmVersion);
+    }
 
-	public void setMaxHeapSize(int maxHeapSize) {
-		this.maxHeapSize = maxHeapSize;
-	}
+    public int getMinHeapSize() {
+        return minHeapSize;
+    }
 
-	public boolean isOutOfProcessv() {
-		return outOfProcessv;
-	}
+    public void setMinHeapSize(int minHeapSize) {
+        this.minHeapSize = minHeapSize;
+    }
 
-	public void setOutOfProcessv(boolean outOfProcessv) {
-		this.outOfProcessv = outOfProcessv;
-	}
+    public int getMaxHeapSize() {
+        return maxHeapSize;
+    }
 
-	public int getProcessMemory() {
-		return processMemory;
-	}
+    public void setMaxHeapSize(int maxHeapSize) {
+        this.maxHeapSize = maxHeapSize;
+    }
 
-	public void setProcessMemory(int processMemory) {
-		this.processMemory = processMemory;
-	}
+    /**
+     * Not used currently.
+     * 
+     * @return
+     */
+    public boolean isOutOfProcessv() {
+        return outOfProcessv;
+    }
 
-	public boolean isLongjmpSupported() {
-		return longjmpSupported;
-	}
+    public void setOutOfProcessv(boolean outOfProcessv) {
+        this.outOfProcessv = outOfProcessv;
+    }
 
-	public void setLongjmpSupported(boolean longjmpSupported) {
-		this.longjmpSupported = longjmpSupported;
-	}
+    public int getProcessMemory() {
+        return processMemory;
+    }
 
-	public boolean isHeapDump() {
-		return heapDump;
-	}
+    public void setProcessMemory(int processMemory) {
+        this.processMemory = processMemory;
+    }
 
-	public void setHeapDump(boolean heapDump) {
-		this.heapDump = heapDump;
-	}
+    public boolean isLongjmpSupported() {
+        return longjmpSupported;
+    }
 
-	public List<String> getIncludeJarsFrom() {
-		return includeJarsFrom;
-	}
+    public void setLongjmpSupported(boolean longjmpSupported) {
+        this.longjmpSupported = longjmpSupported;
+    }
 
-	public void setIncludeJarsFrom(List<String> includeJarsFrom) {
-		this.includeJarsFrom = includeJarsFrom;
-	}
+    public boolean isHeapDump() {
+        return heapDump;
+    }
 
-	public FileCollection getExtraLibs() {
-		return extraLibs;
-	}
+    public void setHeapDump(boolean heapDump) {
+        this.heapDump = heapDump;
+    }
 
-	public void setExtraLibs(FileCollection extraLibs) {
-		this.extraLibs = extraLibs;
-	}
+    /**
+     * List the gradle configurations what we use to get jar files for TeaVM
+     * compilations. Default is: ['runtimeClasspath']
+     * 
+     * @return
+     */
+    public List<String> getIncludeJarsFrom() {
+        return includeJarsFrom;
+    }
 
-	public boolean isSkipJavaCompile() {
-		return skipJavaCompile;
-	}
+    public void setIncludeJarsFrom(List<String> includeJarsFrom) {
+        this.includeJarsFrom = includeJarsFrom;
+    }
 
-	public void setSkipJavaCompile(boolean skipJavaCompile) {
-		this.skipJavaCompile = skipJavaCompile;
-	}
-	
-	public void setMissingProjectDefaults(Project project) {
-		if(targetDirectory == null) {
-			targetDirectory = new File(project.getBuildDir(), "teavm");
-			LOG.warn("teavm target directory is not set. Fall back to: {}", targetDirectory.getAbsolutePath());
-		}
-		if(sourceDirectory == null) {
-			sourceDirectory = new File(project.getProjectDir(), "src/main/java");
-			LOG.warn("teavm compile soruce directory is not set. Fall back to: {}", sourceDirectory.getAbsolutePath());
-		}
-		if(classFiles == null) {
-			classFiles = project.files(new File(project.getBuildDir(), "classes/java/main"));
-			LOG.warn("teavm classes directory is not set. Fall back to: {}", classFiles.getSingleFile().getAbsolutePath());
-		}
-	}
+    /**
+     * List of additional jar files.
+     * 
+     * @return
+     */
+    public FileCollection getExtraLibs() {
+        return extraLibs;
+    }
+
+    public void setExtraLibs(FileCollection extraLibs) {
+        this.extraLibs = extraLibs;
+    }
+
+    /**
+     * If set to true than the default task does not depend on Java compile.
+     * 
+     * @return
+     */
+    public boolean isSkipJavaCompile() {
+        return skipJavaCompile;
+    }
+
+    public void setSkipJavaCompile(boolean skipJavaCompile) {
+        this.skipJavaCompile = skipJavaCompile;
+    }
+
+    /**
+     * This method is called in various places where a {@link Project} object is
+     * already available to set up defaults that might be missing. Non null values
+     * are not touched. (This method is idempotent, you can call as many times as
+     * you want, the result will be the same.
+     * 
+     * @param project
+     */
+    public void setMissingProjectDefaults(Project project) {
+        if (targetDirectory == null) {
+            targetDirectory = new File(project.getBuildDir(), "teavm");
+            LOG.warn("teavm target directory is not set. Fall back to: {}", targetDirectory.getAbsolutePath());
+        }
+        if (sourceDirectory == null) {
+            sourceDirectory = new File(project.getProjectDir(), "src/main/java");
+            LOG.warn("teavm compile soruce directory is not set. Fall back to: {}", sourceDirectory.getAbsolutePath());
+        }
+        if (classFiles == null) {
+            classFiles = project.files(new File(project.getBuildDir(), "classes/java/main"));
+            LOG.warn("teavm classes directory is not set. Fall back to: {}",
+                    classFiles.getSingleFile().getAbsolutePath());
+        }
+    }
 }

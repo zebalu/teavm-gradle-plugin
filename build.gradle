@@ -1,33 +1,105 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 java.sourceCompatibility='VERSION_1_8'
 java.targetCompatibility='VERSION_1_8'
 
-repositories {
-    jcenter()
+buildscript {
+    dependencies { classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1' }
+    repositories { jcenter() }
 }
+
+repositories { jcenter() }
 
 dependencies {
 
-	implementation group: 'org.teavm', name: 'teavm-tooling', version: teavmVersion
-	implementation group: 'org.teavm', name: 'teavm-cli', version: teavmVersion
+    implementation group: 'org.teavm', name: 'teavm-tooling', version: teavmVersion
+    implementation group: 'org.teavm', name: 'teavm-cli', version: teavmVersion
 
-	implementation gradleApi()
+    implementation gradleApi()
     implementation localGroovy()
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
 
-publishing {
-	publications {
-		maven(MavenPublication) {
-			groupId = 'io.github.zebalu'
-			artifactId = project.name
-			version = version
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+    from 'src/main/resources'
+}
 
-			from components.java
-		}
-	}
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    dependsOn javadoc
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
+    archives javadocJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "zebalu"
+            name "Balázs Zaicsek"
+            email "zebalu@gmail.com"
+        }
+    }
+
+    scm { url "https://github.com/zebalu/teavm-gradle-plugin" }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'io.github.zebalu'
+            artifactId = project.name
+            version = version
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Extend gradle with the capability of compiling bytecdoe to JavasCript.')
+                root.appendNode('name', 'Teavm Gradle Plugin')
+                root.appendNode('url', 'https://github.com/zebalu/teavm-gradle-plugin')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    user = getPropertyOrWarn('bintray.user')
+    key = getPropertyOrWarn('bintray.key')
+    publications = ['maven']
+
+    pkg {
+        repo = 'releases'
+        name = 'teavm-gradle-plugin'
+        userOrg = 'zebalu'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/zebalu/gradle-aspectj'
+    }
+}
+
+String getPropertyOrWarn(String propertyName) {
+    if ( !project.hasProperty(propertyName) ) {
+        logger.warn("There is no property set with name: ${propertyName}. Publication might fail.")
+        return 'missing'
+    }
+    return project.getProperty(propertyName)
 }

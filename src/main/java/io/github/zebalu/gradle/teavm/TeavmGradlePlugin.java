@@ -21,36 +21,42 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
+/**
+ * This plugin adds teavmc task to project and teavm extension object.
+ * 
+ * @author zebalu
+ *
+ */
 public class TeavmGradlePlugin implements Plugin<Project> {
 
-	private Project project;
-	private TeavmExtension settings;
+    private Project project;
+    private TeavmExtension settings;
 
-	@Override
-	public void apply(Project project) {
-		this.project = project;
-		registerExtension();
-		registerTask();
-	}
+    @Override
+    public void apply(Project project) {
+        this.project = project;
+        registerExtension();
+        registerTask();
+    }
 
-	private void registerTask() {
-		project.getTasks().register("teavmc", TeavmCompileTask.class, new Action<TeavmCompileTask>() {
-			@Override
-			public void execute(TeavmCompileTask teavmCompileTask) {
-				teavmCompileTask.setSettings(settings);
-				if(!settings.isSkipJavaCompile()) {
-					teavmCompileTask.dependsOn(project.getTasks().getByName("compileJava"));
-				}
-			}
-		});
-	}
+    private void registerTask() {
+        project.getTasks().register("teavmc", TeavmCompileTask.class, new Action<TeavmCompileTask>() {
+            @Override
+            public void execute(TeavmCompileTask teavmCompileTask) {
+                teavmCompileTask.setSettings(settings);
+                if (!settings.isSkipJavaCompile()) {
+                    teavmCompileTask.dependsOn(project.getTasks().getByName("compileJava"));
+                }
+            }
+        });
+    }
 
-	private void registerExtension() {
-		settings = new TeavmExtension();
-		settings.setClassFiles(project.files(new File(project.getBuildDir(), "classes/java/main")));
-		settings.setTargetDirectory(new File(project.getBuildDir(), "teavm"));
-		settings.setCacheDirectory(new File(project.getBuildDir(), "teavm-cache"));
-		settings.setSourceDirectory(new File(project.getProjectDir(), "src/main/java"));
-		project.getExtensions().add("teavm", settings);
-	}
+    private void registerExtension() {
+        settings = new TeavmExtension();
+        settings.setClassFiles(project.files(new File(project.getBuildDir(), "classes/java/main")));
+        settings.setTargetDirectory(new File(project.getBuildDir(), "teavm"));
+        settings.setCacheDirectory(new File(project.getBuildDir(), "teavm-cache"));
+        settings.setSourceDirectory(new File(project.getProjectDir(), "src/main/java"));
+        project.getExtensions().add("teavm", settings);
+    }
 }
