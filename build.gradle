@@ -1,0 +1,33 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+java.sourceCompatibility='VERSION_1_8'
+java.targetCompatibility='VERSION_1_8'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+
+	implementation group: 'org.teavm', name: 'teavm-tooling', version: teavmVersion
+	implementation group: 'org.teavm', name: 'teavm-cli', version: teavmVersion
+
+	implementation gradleApi()
+    implementation localGroovy()
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'io.github.zebalu'
+			artifactId = project.name
+			version = version
+
+			from components.java
+		}
+	}
+}
