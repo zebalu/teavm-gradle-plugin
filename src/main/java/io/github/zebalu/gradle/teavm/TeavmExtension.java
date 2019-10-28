@@ -86,7 +86,7 @@ public class TeavmExtension {
 
     private int maxHeapSize = 128;
 
-    private boolean outOfProcessv = false;
+    private boolean outOfProcess = false;
 
     private int processMemory = 512;
 
@@ -369,12 +369,12 @@ public class TeavmExtension {
      * 
      * @return
      */
-    public boolean isOutOfProcessv() {
-        return outOfProcessv;
+    public boolean isOutOfProcess() {
+        return outOfProcess;
     }
 
-    public void setOutOfProcessv(boolean outOfProcessv) {
-        this.outOfProcessv = outOfProcessv;
+    public void setOutOfProcess(boolean outOfProcess) {
+        this.outOfProcess = outOfProcess;
     }
 
     public int getProcessMemory() {
