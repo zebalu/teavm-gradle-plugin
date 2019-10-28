@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'io.github.zebalu.teavm-gradle-plugin'
+
+import io.github.zebalu.gradle.teavm.*
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'io.github.zebalu:teavm-gradle-plugin:+'
+    }
+}
+
+teavm {
+    mainClass = 'example.Main'
+    sourceDirectory = file('src')
+    targetDirectory = file('build/resources/META-INF/webjars/example')
+    targetFileName  = 'myJsLib.js'
+}
+
+task otherTeaCompile (type: TeavmCompileTask){
+    settings.sourceDirectory = file('src')
+    settings.targetDirectory = file('build/javascript')
+    settings.mainClass = 'example.Main'
+}
