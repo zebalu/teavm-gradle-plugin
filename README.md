@@ -16,4 +16,4 @@ Gradle plugin to compile jvm languages (bytecode) to Javascript (/Web assembly /
         }
     }
     
-this is the minimal setup to use the plugin.
+this is the minimal setup to use the plugin. (Compile task is `teavmc`.)
