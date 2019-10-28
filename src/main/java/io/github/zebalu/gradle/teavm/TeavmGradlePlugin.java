@@ -46,6 +46,7 @@ public class TeavmGradlePlugin implements Plugin<Project> {
                 teavmCompileTask.setSettings(settings);
                 if (!settings.isSkipJavaCompile()) {
                     teavmCompileTask.dependsOn(project.getTasks().getByName("compileJava"));
+                    teavmCompileTask.setGroup("TeaVM");
                 }
             }
         });
