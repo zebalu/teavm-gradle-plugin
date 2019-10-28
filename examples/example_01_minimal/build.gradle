@@ -1,0 +1,16 @@
+apply plugin: 'java'
+apply plugin: 'io.github.zebalu.teavm-gradle-plugin'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'io.github.zebalu:teavm-gradle-plugin:+'
+    }
+}
+
+teavm {
+    mainClass = 'example.Main'
+}
