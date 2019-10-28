@@ -93,7 +93,7 @@ You should crate a TeavmCompileTask and every setting can be passed to the `sett
 
     task myCupOfTea(type: io.github.zebalue.gradle.teavm.TeavmCompileTask) {
         settings.skipJavaCompile=true
-        settings.entryPointName=leEntry
+        settings.entryPointName='leEntry'
         /** etc. */
     }
     
