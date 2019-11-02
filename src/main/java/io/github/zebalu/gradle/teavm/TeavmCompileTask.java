@@ -19,6 +19,7 @@ import java.io.File;
 import java.net.URLClassLoader;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputDirectory;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
@@ -41,6 +42,7 @@ public class TeavmCompileTask extends DefaultTask {
      * 
      * @return
      */
+    @Input
     public TeavmExtension getSettings() {
         return settings;
     }
