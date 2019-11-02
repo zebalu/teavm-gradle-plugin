@@ -1,6 +1,8 @@
 # teavm-gradle-plugin
 Gradle plugin to compile jvm languages (bytecode) to Javascript (/Web assembly /C)
 
+[![Build Status](https://travis-ci.com/zebalu/teavm-gradle-plugin.svg?branch=master)](https://travis-ci.com/zebalu/teavm-gradle-plugin)
+
 # What is TeaVM?
 
 TeaVM is a nice tool to compile (transpile? decompile? detrasnpile?) bytecode into JavaScript.
