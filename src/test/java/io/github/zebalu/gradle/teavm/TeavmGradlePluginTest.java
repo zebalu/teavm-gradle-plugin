@@ -1,3 +1,18 @@
+/*  Copyright 2019 Balázs Zaicsek
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
 package io.github.zebalu.gradle.teavm;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -32,12 +47,12 @@ public class TeavmGradlePluginTest {
     private TaskContainer taskContainer;
     private File buildDir = new File("build");
     private File projectDir = new File("");
-    
+
     @Captor
     private ArgumentCaptor<TeavmExtension> extensionCaptor;
-    
+
     private TeavmGradlePlugin plugin = new TeavmGradlePlugin();
-    
+
     @BeforeEach
     public void initMock() {
         Mockito.when(project.getBuildDir()).thenReturn(buildDir);
@@ -45,28 +60,28 @@ public class TeavmGradlePluginTest {
         Mockito.when(project.getExtensions()).thenReturn(extensions);
         Mockito.when(project.getTasks()).thenReturn(taskContainer);
     }
-    
+
     @Test
     public void pluginCanBeApplied() {
-        assertDoesNotThrow(()->plugin.apply(project));
+        assertDoesNotThrow(() -> plugin.apply(project));
     }
-    
+
     @Test
     public void applyMakesExtension() {
         plugin.apply(project);
         Mockito.verify(extensions).add(Mockito.eq("teavm"), Mockito.any(TeavmExtension.class));
     }
-    
+
     @Test
     public void extensionSetUpCorrectly() {
         plugin.apply(project);
         Mockito.verify(extensions).add(Mockito.anyString(), extensionCaptor.capture());
         TeavmExtension extension = extensionCaptor.getValue();
-        assertAll(()->{
+        assertAll(() -> {
             assertEquals(extension.getCacheDirectory(), new File(buildDir, "teavm-cache"));
         });
     }
-    
+
     @Test
     public void configSetsExtension() {
         plugin.apply(project);
@@ -79,10 +94,11 @@ public class TeavmGradlePluginTest {
         Mockito.verify(tct).setSettings(secondCaptor.capture());
         assertSame(extension, secondCaptor.getValue());
     }
-    
+
     @Test
     public void teavmcTaskISRegistered() {
         plugin.apply(project);
-        Mockito.verify(taskContainer).register(Mockito.eq("teavmc"), Mockito.eq(TeavmCompileTask.class), Mockito.any(TeavmGradlePlugin.TeavmCompileExecutorAction.class));
+        Mockito.verify(taskContainer).register(Mockito.eq("teavmc"), Mockito.eq(TeavmCompileTask.class),
+                Mockito.any(TeavmGradlePlugin.TeavmCompileExecutorAction.class));
     }
 }
