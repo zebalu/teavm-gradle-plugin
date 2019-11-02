@@ -1,13 +1,23 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.gradle.plugin-publish'
+apply plugin: 'dev.gradleplugins.java-gradle-plugin'
+apply plugin: 'java-gradle-plugin'
 
 java.sourceCompatibility='VERSION_1_8'
 java.targetCompatibility='VERSION_1_8'
 
 buildscript {
-    dependencies { classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1' }
-    repositories { jcenter() }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
+        classpath 'com.gradle.publish:plugin-publish-plugin:0.10.1'
+        classpath 'dev.gradleplugins:gradle-plugin-development:0.0.21'
+    }
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
 }
 
 repositories { jcenter() }
@@ -20,8 +30,35 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
 
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.1.0'
+    
+    testImplementation gradleTestKit()
+    
+    // https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine
+    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
+    
+    
+    
+}
+
+test {
+    useJUnitPlatform()
+}
+
+gradlePlugin {
+    pluginSourceSet project.sourceSets.main
+    testSourceSets project.sourceSets.test
+    plugins {
+        teavmPlugin {
+            id = 'io.github.zebalu.teavm-gradle-plugin'
+            implementationClass = 'io.github.zebalu.gradle.teavm.TeavmGradlePlugin'
+        }
+    }
 }
 
 task sourcesJar(type: Jar) {
@@ -95,6 +132,36 @@ bintray {
         vcsUrl = 'https://github.com/zebalu/gradle-aspectj'
     }
 }
+
+gradlePlugin {
+    plugins {
+        teavmPlugin {
+            id = 'io.github.zebalu.teavm-gradle-plugin'
+            implementationClass = 'io.github.zebalu.gradle.teavm.TeavmGradlePlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/zebalu/teavm-gradle-plugin'
+    vcsUrl = 'https://github.com/zebalu/teavm-gradle-plugin'
+
+    description = 'TeaVM Gradle Plugin is bridge to use TeaVM with gradle and compile Java to JavaScript.'
+
+    plugins {
+        teavmPlugin {
+            displayName = 'Gradle Greeting plugin'
+            tags = ['teavm', 'bytecode', 'javascript', 'transpile']
+        }
+    }
+    
+    mavenCoordinates {
+        groupId = project.groupId
+        artifactId = project.name
+        version = project.version
+      }
+}
+
 
 String getPropertyOrWarn(String propertyName) {
     if ( !project.hasProperty(propertyName) ) {

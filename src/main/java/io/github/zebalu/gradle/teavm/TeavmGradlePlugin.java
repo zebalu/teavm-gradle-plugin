@@ -40,16 +40,7 @@ public class TeavmGradlePlugin implements Plugin<Project> {
     }
 
     private void registerTask() {
-        project.getTasks().register("teavmc", TeavmCompileTask.class, new Action<TeavmCompileTask>() {
-            @Override
-            public void execute(TeavmCompileTask teavmCompileTask) {
-                teavmCompileTask.setSettings(settings);
-                if (!settings.isSkipJavaCompile()) {
-                    teavmCompileTask.dependsOn(project.getTasks().getByName("compileJava"));
-                    teavmCompileTask.setGroup("TeaVM");
-                }
-            }
-        });
+        project.getTasks().register("teavmc", TeavmCompileTask.class, new TeavmCompileExecutorAction());
     }
 
     private void registerExtension() {
@@ -59,5 +50,18 @@ public class TeavmGradlePlugin implements Plugin<Project> {
         settings.setCacheDirectory(new File(project.getBuildDir(), "teavm-cache"));
         settings.setSourceDirectory(new File(project.getProjectDir(), "src/main/java"));
         project.getExtensions().add("teavm", settings);
+    }
+    
+    public class TeavmCompileExecutorAction implements Action<TeavmCompileTask> {
+
+        @Override
+        public void execute(TeavmCompileTask teavmCompileTask) {
+            teavmCompileTask.setSettings(settings);
+            if (!settings.isSkipJavaCompile()) {
+                teavmCompileTask.dependsOn(project.getTasks().getByName("compileJava"));
+                teavmCompileTask.setGroup("TeaVM");
+            }
+        }
+        
     }
 }

@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+    id 'io.github.zebalu.teavm-gradle-plugin'
+}
+
+teavm {
+    mainClass='example.Main'
+}

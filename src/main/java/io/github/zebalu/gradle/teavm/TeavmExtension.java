@@ -297,7 +297,7 @@ public class TeavmExtension {
     }
 
     public void setOptimizationLevel(String optimizationLevel) {
-        this.optimizationLevel = TeaVMOptimizationLevel.valueOf(optimizationLevel);
+        setOptimizationLevel(TeaVMOptimizationLevel.valueOf(optimizationLevel));
     }
 
     public boolean isFastGlobalAnalysis() {
@@ -325,7 +325,7 @@ public class TeavmExtension {
     }
 
     public void setTargetType(String targetType) {
-        this.targetType = TeaVMTargetType.valueOf(targetType);
+        setTargetType(TeaVMTargetType.valueOf(targetType));
     }
 
     public File getCacheDirectory() {

@@ -31,7 +31,11 @@ public class Slf4JTeavmLog implements TeaVMToolLog {
     private final Logger log;
 
     public Slf4JTeavmLog(Class<?> clazz) {
-        log = LoggerFactory.getLogger(clazz);
+        this(LoggerFactory.getLogger(clazz));
+    }
+
+    public Slf4JTeavmLog(Logger log) {
+        this.log = log;
     }
 
     @Override
