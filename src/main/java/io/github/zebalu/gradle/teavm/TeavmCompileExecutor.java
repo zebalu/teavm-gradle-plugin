@@ -3,6 +3,7 @@ package io.github.zebalu.gradle.teavm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
@@ -122,10 +123,16 @@ class TeavmCompileExecutor {
     }
 
     private void addFileCollectionToPathes(List<String> pathes, FileCollection collection) {
+        if (collection != null) {
+            addFileCollectionToPathes(pathes, collection.getFiles());
+        }
+    }
+    
+    private void addFileCollectionToPathes(List<String> pathes, Set<File> collection) {
         if (collection == null) {
             return;
         }
-        for (File file : collection.getFiles()) {
+        for (File file : collection) {
             pathes.add(file.getAbsolutePath());
         }
     }

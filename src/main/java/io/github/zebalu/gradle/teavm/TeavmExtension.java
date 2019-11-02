@@ -16,10 +16,13 @@
 package io.github.zebalu.gradle.teavm;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
@@ -34,11 +37,13 @@ import org.teavm.vm.TeaVMOptimizationLevel;
  * 
  * @author zebalu
  */
-public class TeavmExtension {
+public class TeavmExtension implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(TeavmExtension.class);
 
-    private FileCollection classFiles = null;
+    private Set<File> classFiles = null;
 
     private List<String> compileScopes = null;
 
@@ -96,7 +101,7 @@ public class TeavmExtension {
 
     private List<String> includeJarsFrom = new ArrayList<>(Arrays.asList("runtimeClasspath"));
 
-    private FileCollection extraLibs = null;
+    private Set<File> extraLibs = null;
 
     private boolean skipJavaCompile = false;
 
@@ -105,7 +110,7 @@ public class TeavmExtension {
      * 
      * @return
      */
-    public FileCollection getClassFiles() {
+    public Set<File> getClassFiles() {
         return classFiles;
     }
 
@@ -115,9 +120,22 @@ public class TeavmExtension {
      * @param classFiles
      */
     public void setClassFiles(FileCollection classFiles) {
-        this.classFiles = classFiles;
+        if(classFiles == null) {
+            this.classFiles=null;
+        } else {
+            setClassFiles(classFiles.getFiles());
+        }
     }
 
+    /**
+     * Set list of class files to compile with TeaVM.
+     * 
+     * @param classFiles
+     */
+    public void setClassFiles(Set<File> classFiles) {
+        this.classFiles = classFiles;
+    }
+    
     public List<String> getCompileScopes() {
         return compileScopes;
     }
@@ -420,11 +438,19 @@ public class TeavmExtension {
      * 
      * @return
      */
-    public FileCollection getExtraLibs() {
+    public Set<File> getExtraLibs() {
         return extraLibs;
     }
 
     public void setExtraLibs(FileCollection extraLibs) {
+        if(extraLibs == null) {
+            this.extraLibs=null;
+        } else {
+            setExtraLibs(extraLibs.getFiles());
+        }
+    }
+    
+    public void setExtraLibs(Set<File> extraLibs) {
         this.extraLibs = extraLibs;
     }
 
@@ -459,9 +485,10 @@ public class TeavmExtension {
             LOG.warn("teavm compile soruce directory is not set. Fall back to: {}", sourceDirectory.getAbsolutePath());
         }
         if (classFiles == null) {
-            classFiles = project.files(new File(project.getBuildDir(), "classes/java/main"));
+            File fallbackFile = new File(project.getBuildDir(), "classes/java/main");
+            classFiles = Collections.singleton(fallbackFile);
             LOG.warn("teavm classes directory is not set. Fall back to: {}",
-                    classFiles.getSingleFile().getAbsolutePath());
+                    fallbackFile.getAbsolutePath());
         }
     }
 }

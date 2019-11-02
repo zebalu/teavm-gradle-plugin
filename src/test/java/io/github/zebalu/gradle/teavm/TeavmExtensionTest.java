@@ -2,9 +2,14 @@ package io.github.zebalu.gradle.teavm;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.gradle.api.Project;
 import org.gradle.api.file.ConfigurableFileCollection;
@@ -34,8 +39,6 @@ public class TeavmExtensionTest {
     public void extensionSetsUpMissingPartsFromProject() {
         given(project.getBuildDir()).willReturn(new File(""));
         given(project.getProjectDir()).willReturn(new File(""));
-        given(project.files(any())).willReturn(fileCollection);
-        given(fileCollection.getSingleFile()).willReturn(new File(""));
         
         teavmExtension.setMissingProjectDefaults(project);
         
@@ -65,5 +68,16 @@ public class TeavmExtensionTest {
     @Test
     public void skipJavaCompileIsFalseByDefault() {
         assertFalse(teavmExtension.isSkipJavaCompile());
+    }
+    
+    @Test
+    public void externalizationTest() throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(new TeavmExtension());
+        oos.close();
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+        TeavmExtension teaExtension = (TeavmExtension)ois.readObject();
+        assertNotNull(teaExtension);
     }
 }

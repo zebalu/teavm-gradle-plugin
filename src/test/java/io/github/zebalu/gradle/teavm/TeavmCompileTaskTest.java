@@ -1,7 +1,6 @@
 package io.github.zebalu.gradle.teavm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.io.File;
 
@@ -22,7 +21,6 @@ public class TeavmCompileTaskTest {
 
     @BeforeEach
     public void copyTemplateProject() throws Exception {
-        assumeFalse(new File("").getAbsolutePath().contains("travis"), "This test can not run on travis ci, skipping");
         CopyUtil.copy(new File(inputDir, projectName), builDir);
     }
 
