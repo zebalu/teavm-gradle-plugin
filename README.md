@@ -3,6 +3,7 @@ Gradle plugin to compile jvm languages (bytecode) to Javascript (/Web assembly /
 
 [![Build Status](https://travis-ci.com/zebalu/teavm-gradle-plugin.svg?branch=master)](https://travis-ci.com/zebalu/teavm-gradle-plugin)
 [ ![Download](https://api.bintray.com/packages/zebalu/releases/teavm-gradle-plugin/images/download.svg) ](https://bintray.com/zebalu/releases/teavm-gradle-plugin/_latestVersion)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # What is TeaVM?
 
