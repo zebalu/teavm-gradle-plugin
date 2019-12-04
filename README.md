@@ -85,7 +85,7 @@ It goes like this (every value is the default):
        /** FileCollection object which adds extra jars to compilation. */
        extraLibs = null;
        
-       /** By default teavmc taskd epends on javaCompile task, unless this varaibale is true. /
+       /** By default teavmc taskd epends on javaCompile task, unless this varaibale is true. */
        skipJavaCompile = false;       
     }
     
