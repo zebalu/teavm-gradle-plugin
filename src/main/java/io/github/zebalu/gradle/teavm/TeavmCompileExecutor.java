@@ -63,13 +63,14 @@ class TeavmCompileExecutor {
         buildStrategy.setClassPathEntries(prepareClassPath());
         buildStrategy.setDebugInformationGenerated(settings.isDebugInformationGenerated());
         buildStrategy.setEntryPointName(settings.getEntryPointName());
-        buildStrategy.setHeapSize(settings.getMaxHeapSize());
+        buildStrategy.setMaxHeapSize(settings.getMaxHeapSize());
+        buildStrategy.setMinHeapSize(settings.getMinHeapSize());
         buildStrategy.setIncremental(settings.isIncremental());
         buildStrategy.setLog(new Slf4JTeavmLog(TeavmCompileTask.class));
         buildStrategy.setLongjmpSupported(settings.isLongjmpSupported());
         buildStrategy.setMainClass(settings.getMainClass());
         buildStrategy.setMaxTopLevelNames(settings.getMaxTopLevelNames());
-        buildStrategy.setMinifying(settings.isMinifying());
+        buildStrategy.setObfuscated(settings.isObfuscated());
         buildStrategy.setOptimizationLevel(settings.getOptimizationLevel());
         buildStrategy.setProgressListener(new LoggingProgressListener(LOG));
         if (settings.getProperties() != null) {

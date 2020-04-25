@@ -47,7 +47,7 @@ public class TeavmExtension implements Serializable {
 
     private List<String> compileScopes = null;
 
-    private boolean minifying = true;
+    private boolean obfuscated = true;
 
     private int maxTopLevelNames = 10000;
 
@@ -144,12 +144,28 @@ public class TeavmExtension implements Serializable {
         this.compileScopes = compileScopes;
     }
 
-    public boolean isMinifying() {
-        return minifying;
+    public boolean isObfuscated() {
+    	return obfuscated;
     }
 
+    public void setObfuscated(boolean obfuscated) {
+        this.obfuscated = obfuscated;
+    }
+    
+    @Deprecated
+    /**
+     * @deprecated Use isObfuscated instead
+     */
+    public boolean isMinifying() {
+        return obfuscated;
+    }
+
+    @Deprecated
+    /**
+     * @deprecated Use setObfuscated instead
+     */
     public void setMinifying(boolean minifying) {
-        this.minifying = minifying;
+        this.obfuscated = minifying;
     }
 
     /**
