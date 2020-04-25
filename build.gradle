@@ -20,7 +20,12 @@ buildscript {
     }
 }
 
-repositories { jcenter() }
+repositories { 
+	jcenter()
+    maven {
+        url  "https://dl.bintray.com/konsoletyper/teavm" 
+    }
+}
 
 dependencies {
 

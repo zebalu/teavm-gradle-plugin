@@ -41,7 +41,7 @@ It goes like this (every value is the default):
        classFiles = null;
        
        compileScopes = null;
-       minifying = true;
+       obfuscated = true;
        maxTopLevelNames = 10000;
        properties = null;
        debugInformationGenerated = false;
