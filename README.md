@@ -67,11 +67,11 @@ It goes like this (every value is the default):
        
        classesToPreserve = null;
        stopOnErrors = true;
-       optimizationLevel = TeaVMOptimizationLevel.SIMPLE;
+       optimizationLevel = "SIMPLE"; //org.teavm.vm.TeaVMOptimizationLevel.SIMPLE;
        fastGlobalAnalysis = false;
-       targetType = TeaVMTargetType.JAVASCRIPT;
+       targetType = "JAVASCRIPT"; //org.teavm.tooling.TeaVMTargetType.JAVASCRIPT;
        cacheDirectory = null;
-       wasmVersion = WasmBinaryVersion.V_0x1;
+       wasmVersion = "V_0x1"; //org.teavm.backend.wasm.render.WasmBinaryVersion.V_0x1;
        minHeapSize = 4;
        maxHeapSize = 128;
        outOfProcess = false;
