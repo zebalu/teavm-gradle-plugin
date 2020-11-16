@@ -15,7 +15,9 @@
 
 package io.github.zebalu.gradle.teavm;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,19 +36,19 @@ import org.teavm.tooling.builder.BuildStrategy;
 class TeavmCompileExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TeavmCompileExecutor.class);
-    
+
     private final BuildStrategy buildStrategy;
 
     private final TeavmExtension settings;
-    
+
     private final FileCollectionResolver resolver;
-    
+
     TeavmCompileExecutor(TeavmExtension settings, BuildStrategy strategy, FileCollectionResolver resolver) {
-        this.settings=settings;
-        this.buildStrategy=strategy;
-        this.resolver=resolver;
+        this.settings = settings;
+        this.buildStrategy = strategy;
+        this.resolver = resolver;
     }
-    
+
     public void executeCompile() {
         setupBuild();
         executeBuild();
@@ -87,6 +89,30 @@ class TeavmCompileExecutor {
             BuildResult result = buildStrategy.build();
             debugLogResult(result);
             handleProblemsInResult(result);
+
+            try {
+                if (settings.isCreateModuleExports()) {
+                    File file = new File(settings.getTargetDirectory(), settings.getTargetFileName());
+                    if (file.exists() && file.isFile()) {
+
+                        FileWriter fileWriter = new FileWriter(file, true);
+                        BufferedWriter out = new BufferedWriter(fileWriter);
+
+                        out.newLine();
+                        out.write("module.exports = { load:  ");
+                        out.write(settings.getEntryPointName());
+                        out.write(" };");
+                        out.newLine();
+
+                        out.close();
+                    } else {
+                        throw new GradleException("no output file " + file + " found!");
+                    }
+                }
+            } catch (Exception e) {
+                throw new GradleException("failed to create module export", e);
+            }
+
         } catch (BuildException e) {
             throw new GradleException("TeaVM compilation error", e);
         }
@@ -142,7 +168,7 @@ class TeavmCompileExecutor {
             addFileCollectionToPathes(pathes, collection.getFiles());
         }
     }
-    
+
     private void addFileCollectionToPathes(List<String> pathes, Set<File> collection) {
         if (collection == null) {
             return;
@@ -160,8 +186,9 @@ class TeavmCompileExecutor {
         paths.forEach(classPath::add);
         LOG.info("Using the following classpath for TeaVM: {}", classPath.toString());
     }
-    
+
     @FunctionalInterface
-    static interface FileCollectionResolver extends Function<String, FileCollection> {}
-    
+    static interface FileCollectionResolver extends Function<String, FileCollection> {
+    }
+
 }
