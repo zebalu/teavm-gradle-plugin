@@ -105,6 +105,8 @@ public class TeavmExtension implements Serializable {
 
     private boolean skipJavaCompile = false;
 
+    private boolean createModuleExports = false;
+
     /**
      * List of (jar)files/folders where input .class files can be found.
      * 
@@ -278,6 +280,14 @@ public class TeavmExtension implements Serializable {
 
     public void setEntryPointName(String entryPointName) {
         this.entryPointName = entryPointName;
+    }
+
+    public boolean isCreateModuleExports() {
+        return createModuleExports;
+    }
+
+    public void setCreateModuleExports(boolean createModuleExports) {
+        this.createModuleExports = createModuleExports;
     }
 
     public String[] getClassesToPreserve() {

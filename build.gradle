@@ -5,18 +5,20 @@ apply plugin: 'com.gradle.plugin-publish'
 apply plugin: 'dev.gradleplugins.java-gradle-plugin'
 apply plugin: 'java-gradle-plugin'
 
-java.sourceCompatibility='VERSION_1_8'
-java.targetCompatibility='VERSION_1_8'
+java.sourceCompatibility = 'VERSION_1_8'
+java.targetCompatibility = 'VERSION_1_8'
 
 buildscript {
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.1'
-        classpath 'com.gradle.publish:plugin-publish-plugin:0.10.1'
-        classpath 'dev.gradleplugins:gradle-plugin-development:0.0.21'
+        classpath 'com.gradle.publish:plugin-publish-plugin:0.12.0'
+        classpath 'dev.gradleplugins:gradle-plugin-development:1.1'
     }
     repositories {
         jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 }
 
@@ -36,14 +38,13 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.1.0'
-    
+
     testImplementation gradleTestKit()
-    
+
     // https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.2'
-    
-    
-    
+
+
 }
 
 test {
@@ -59,6 +60,10 @@ gradlePlugin {
             implementationClass = 'io.github.zebalu.gradle.teavm.TeavmGradlePlugin'
         }
     }
+}
+
+task functionalTestClasses() {
+
 }
 
 task sourcesJar(type: Jar) {
@@ -101,9 +106,6 @@ def pomConfig = {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'io.github.zebalu'
-            artifactId = project.name
-            version = version
 
             from components.java
             artifact sourcesJar
@@ -133,15 +135,6 @@ bintray {
     }
 }
 
-gradlePlugin {
-    plugins {
-        teavmPlugin {
-            id = 'io.github.zebalu.teavm-gradle-plugin'
-            implementationClass = 'io.github.zebalu.gradle.teavm.TeavmGradlePlugin'
-        }
-    }
-}
-
 pluginBundle {
     website = 'https://github.com/zebalu/teavm-gradle-plugin'
     vcsUrl = 'https://github.com/zebalu/teavm-gradle-plugin'
@@ -154,17 +147,17 @@ pluginBundle {
             tags = ['teavm', 'bytecode', 'javascript', 'transpile']
         }
     }
-    
+
     mavenCoordinates {
-        groupId = project.groupId
+        groupId = project.group
         artifactId = project.name
         version = project.version
-      }
+    }
 }
 
 
 String getPropertyOrWarn(String propertyName) {
-    if ( !project.hasProperty(propertyName) ) {
+    if (!project.hasProperty(propertyName)) {
         logger.warn("There is no property set with name: ${propertyName}. Publication might fail.")
         return 'missing'
     }
